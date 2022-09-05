@@ -1,0 +1,95 @@
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">
+                    <%- misc.title %>
+                </h1>
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="/user-manager">Reports</a></li>
+                    <li class="breadcrumb-item">View</li>
+                </ol>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card card">
+
+                    <div class="card-header">
+                        <a href="/report-manager" class="btn btn-default btn-sm">Reports</a>
+                        <a class="btn btn-default btn-sm" href="<%- '/report-manager/edit/'+response._id %>">Edit</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h3>Reporter : <b><%- response.displayName %></b></h3>
+                            </div>
+                            <div class="col-sm-6">
+                                <table class="mytable table table-hover table-bordered">
+                                    <tbody>
+                                        <tr>
+                                            <th>Reporter</th>
+                                            <td>
+                                                <%- response.displayName %>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Email</th>
+                                            <td>
+                                                <%- response.email %>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Nft Id</th>
+                                            <td>
+                                                <%- response.nftId %>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Reason</th>
+                                            <td>
+                                                <%- response.reason %>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Comment</th>
+                                            <td>
+                                                <%- response.comments %>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Date</th>
+                                            <td>
+                                                <% const convertedDate = (new Date(`${response.date}`).toLocaleString(undefined, {timeZone: 'Asia/Kolkata'})) %>
+                                                
+												<%- convertedDate %>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="card-footer">
+                        <a class="btn btn-info btn-sm" href="<%- '/report-manager/edit/'+response._id %>">Edit</a>
+                        <a class="btn btn-default btn-sm" href="<%- '/report-manager/edit' %>">Back</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<%- include('./crud.ejs')%>

@@ -1,0 +1,73 @@
+<% 
+        var sidebarClasses = '';
+        var asideClasses = '';
+        var brandClass  = '';
+        var keys = ['sidebar_navbar_small_text','sidebar_nav_flat_style','sidebar_nav_legacy_style','sidebar_nav_compact','sidebar_nav_child_indent']
+        var asideClassList = ['sidebar-no-expand','side_bar_text_color','sidebar_variants']; 
+        var brandClassList = ['brand_small_text','brand_logo_variants']
+        for(var i in theme){
+            if(keys.indexOf(theme[i].key)>-1){
+                if(theme[i].value!='0'){
+                    sidebarClasses+= ' '+theme[i].value;
+                }
+            }else if(asideClassList.indexOf(theme[i].key)>-1){
+                if(theme[i].value!='0'){
+                    asideClasses+= ' '+theme[i].value;
+                }
+            }else if(brandClassList.indexOf(theme[i].key)>-1){
+                if(theme[i].value!='0'){
+                    brandClass+= ' '+theme[i].value;
+                }
+            }
+        }
+        asideClasses = asideClasses==''?'sidebar-dark-primary':asideClasses;
+    %>
+
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar elevation-4 <%- asideClasses %>">
+        <!-- Brand Logo -->
+        <a href="/" class="brand-link text-center <%- brandClass%>">
+            
+        <span class="brand-text font-weight-light"><%- auth.name %></span>
+        </a>
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Sidebar user panel (optional) -->
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                <div class="image">
+                    <% if(auth && auth.profile_picture) { %>
+                        <img style="width: 100%;" class="profile-user-img img-fluid img-circle" src="<%- '/public/uploads/'+ auth.profile_picture %>">
+                        <% } else { %>
+                            <img src="/public/dist/img/avatar.png" class="img-circle elevation-2" alt="User Image">
+                            <% } %>
+                </div>
+               
+            </div>
+
+            <!-- Sidebar Menu -->
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column <%- sidebarClasses %>" data-widget="treeview" role="menu" data-accordion="false">
+                    <li class="nav-item has-treeview <%- misc.route_name=='dashboard'? 'active' :'' %>">
+                        <a href="/dashboard" class="nav-link <%- misc.route_name=='dashboard'? 'active' :'' %>">
+                            <i class="fa fa-tachometer-alt nav-icon"></i>
+                            <p>Dashboard</p>
+                        </a>
+                    </li>
+                    
+                    <%- include('../../../plugins/auction-manager/views/menu');%>
+                    <%- include('../../../plugins/deal-manager/views/menu');%>
+                    <%- include('../../../plugins/sell-manager/views/menu');%>
+                    <%- include('../../../plugins/nft-manager/views/menu');%>
+                    <%- include('../../../plugins/report-manager/views/menu');%>
+                    <%- include('../../../plugins/user-manager/views/menu');%>
+                    <%- include('../../../plugins/contact-manager/views/menu');%>
+                    <%- include('../../../plugins/cms-manager/views/menu');%>
+                    <%- include('../../../plugins/social-manager/views/menu');%>
+                    <!---<%- include('../../../plugins/mynft-manager/views/menu');%>-->
+                    
+                </ul>
+            </nav>
+            <!-- /.sidebar-menu -->
+        </div>
+        <!-- /.sidebar -->
+    </aside>

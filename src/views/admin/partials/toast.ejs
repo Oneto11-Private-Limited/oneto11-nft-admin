@@ -1,0 +1,23 @@
+<script>
+    var flashNotifications = JSON.parse('<%- JSON.stringify(getMessages()) %>');
+    window.addEventListener('DOMContentLoaded', () => {
+        toastr.options = {
+            "positionClass": "toast-bottom-right",
+        }
+        for (var k in flashNotifications['success']) {
+            toastr.success(flashNotifications['success'][k]);
+        }
+
+        for (var k in flashNotifications['warning']) {
+            toastr.warning(flashNotifications['warning'][k]);
+        }
+
+        for (var k in flashNotifications['error']) {
+            toastr.error(flashNotifications['error'][k]);
+        }
+
+        for (var k in flashNotifications['info']) {
+            toastr.info(flashNotifications['info'][k]);
+        }
+    });
+</script>

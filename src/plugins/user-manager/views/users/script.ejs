@@ -1,0 +1,93 @@
+<script>
+	$(document).ready(function () {
+		var queryStrings = window.location.search.replace("?", "");
+		listAndSearch(queryStrings);
+		$(document).on("submit", "#search", function (e) {
+			e.preventDefault();
+			document.getElementById("page").value = 1;
+			listAndSearch();
+		});
+		$(document).on("click", ".page-link", function (e) {
+			var page = this.getAttribute("data-page");
+			if (+page) {
+				setTimeout(function () {
+					listAndSearch();
+				}, 0);
+			}
+		});
+		$(document).on("click", "#reset", function (e) {
+			document.getElementById("search").reset();
+			document.getElementById("page").value = 1;
+			listAndSearch();
+		});
+	});
+	listAndSearch = (queryString) => {
+		var query = queryString || $("#search").serialize();
+		document.getElementById("table-content").innerHTML = rowLoader(7);
+		loaderShow();
+		$.ajax({
+			method: "get",
+			data: query,
+			url: "/user-manager/list",
+			success: function (res) {
+				loaderHide();
+				if (res.status) {
+					buildTable(res.data.result);
+					buildPagination(res.data, document.getElementById("page").value);
+					updateArgsWithQueryStrings(query);
+				}
+			},
+		});
+	};
+	buildTable = (data) => {
+		var table = document.getElementById("table-content");
+		document.getElementById("table-content").innerHTML = "";
+		for (var i = 0; i < data.length; i++) {
+			var row = table.insertRow(i);
+			var c1 = row.insertCell(0);
+			var c2 = row.insertCell(1);
+			var c3 = row.insertCell(2);
+			var c4 = row.insertCell(3);
+			var c5 = row.insertCell(4);
+			var c6 = row.insertCell(5);
+			c1.innerHTML =  i+1;
+			c2.innerHTML = data[i]["profileImage"]
+				? `<img src='https://techyroots.com/polygonApi/assets/images/${data[i]["profileImage"]}' style='border-radius: 50px;' width=\'50px\' height=\'50px\'>`
+				: "<img src='/public/dist/img/avatar.png' width='50px' height='50px' style='border-radius: 50px;'>";
+			c2.style = "text-align:center";
+			c3.innerHTML = data[i]["displayName"];
+			c4.innerHTML = `${data[i]["email"]}`;
+			// c4.innerHTML = data[i]["username"];
+			// c5.innerHTML = data[i]["status"]
+			// 	? '<i class="fa fa-check text-green"></i>'
+				// : '<i class="fa fa-time/s text-red"></i>';
+			// c5.innerHTML = getDate(data[i]["date"]);
+            // console.log('hello')
+            // console.log(new Date((data[i]["date"])).toLocaleString())
+            
+			// c5.innerHTML = (`${dateIST},${timeIST}`);
+			c5.innerHTML = getDate(data[i]["date"]);
+			
+			var id = data[i]["_id"];
+			c6.innerHTML =
+				'<a href="/user-manager/view/' +
+				id +
+				'" class="btn btn-info btn-xs">View</a>' +
+				' <a href="/user-manager/edit/' +
+				id +
+				'" class="btn btn-primary btn-xs">Edit</a>' +
+				' <a href="/user-manager/delete/' +
+				id +
+				'" class="js-delete-link btn btn-danger btn-xs" data-message="Are you sure you want to delete ' +
+				data[i]["name"] +
+				'">Delete</a>';
+		}
+	};
+	getDate = (date) => {
+		if (!date) {
+			return "";
+		} else {
+			return (new Date(`${date}`).toLocaleString(undefined, {timeZone: 'Asia/Kolkata'}));
+		}
+	};
+</script>

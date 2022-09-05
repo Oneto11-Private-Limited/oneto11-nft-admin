@@ -1,0 +1,85 @@
+<div class="content-header">
+	<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+				<h1 class="m-0 text-dark"><%- misc.title %></h1>
+			</div>
+			<!-- /.col -->
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-right">
+					<li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+					<li class="breadcrumb-item">
+						<a href="/user-manager">Users</a>
+					</li>
+					<li class="breadcrumb-item">View</li>
+				</ol>
+			</div>
+			<!-- /.col -->
+		</div>
+		<!-- /.row -->
+	</div>
+	<!-- /.container-fluid -->
+</div>
+
+<section class="content">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-12">
+				<div class="card card">
+					<div class="card-header">
+						<a href="/contact-manager" class="btn btn-default btn-sm"
+							>Contact</a
+						>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col-sm-12">
+								<h3>Name : <b><%- result.fullName %></b></h3>
+							</div>
+							<div class="col-sm-6">
+								<table class="mytable table table-hover table-bordered">
+									<tbody>
+										<tr>
+											<th>Name</th>
+											<td><%- result.fullName %></td>
+										</tr>
+										<tr>
+											<th>Email</th>
+											<td><%- result.email %></td>
+										</tr>
+                                        <tr>
+											<th>Subject</th>
+											<td><%- result.subject %></td>
+										</tr>
+                                        <tr>
+											<th>Message</th>
+											<td><%- result.message %></td>
+										</tr>
+										<tr>
+											<th>Created</th>
+											<td>
+												<% const convertedDate = (new Date(`${result.date}`).toLocaleString(undefined, {timeZone: 'Asia/Kolkata'})) %>
+                                                
+												<%- convertedDate %>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							
+						</div>
+					</div>
+					<div class="card-footer">
+						<a href="/contact-manager/delete/<%- result._id %> " class="js-delete-link btn btn-danger btn-sm" data-message="Are you sure you want to delete <%- result.fullName %>">Delete</a>
+						<a
+							class="btn btn-default btn-sm"
+							href="<%- '/contact-manager' %>"
+							>Back</a
+						>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<%- include('./crud.ejs')%>

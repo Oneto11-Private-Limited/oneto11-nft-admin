@@ -1,0 +1,60 @@
+<script>
+    $(document).ready(function() {
+        var queryStrings = window.location.search.replace('?','');
+        listAndSearch(queryStrings);
+        $(document).on('submit', '#search', function(e) {
+            e.preventDefault();
+            document.getElementById('page').value = 1;
+            listAndSearch();
+        })
+        $(document).on('click', '.page-link', function(e) {
+            setTimeout(function() {
+                listAndSearch();
+            }, 0)
+        })
+        $(document).on('click', '#reset', function(e) {
+            document.getElementById("search").reset();
+            document.getElementById('page').value = 1;
+            listAndSearch();
+        })
+    })
+    listAndSearch = (queryString) => {
+        var query = queryString || $('#search').serialize();
+        document.getElementById("table-content").innerHTML = rowLoader(7);
+        loaderShow();
+        $.ajax({
+            method: 'get',
+            data: query,
+            url: '/cms-manager/list',
+            success: function(res) {
+                loaderHide()
+                if (res.status) {
+                    buildTable(res.data.result);
+                    buildPagination(res.data,document.getElementById('page').value);
+                    updateArgsWithQueryStrings(query);
+                }
+            }
+        })
+    }
+    buildTable = (data) => {
+        var table = document.getElementById("table-content");
+        document.getElementById("table-content").innerHTML = '';
+        for (var i = 0; i < data.length; i++) {
+            var row = table.insertRow(i);
+            var c1 = row.insertCell(0);
+            var c2 = row.insertCell(1);
+            var c3 = row.insertCell(2);
+            var c4 = row.insertCell(3);
+            c1.innerHTML = data[i]['name'];
+            c2.innerHTML = data[i]['slug'];
+            c3.innerHTML = data[i]['created_at'];
+            var id = data[i]['_id'];
+            c4.innerHTML = 
+            ' <a href="/cms-manager/edit/'+id+'" class="btn btn-primary btn-xs">Edit</a>'
+        }
+    }  
+    
+   
+
+
+</script>

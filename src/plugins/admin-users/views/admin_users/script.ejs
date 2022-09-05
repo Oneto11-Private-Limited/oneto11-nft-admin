@@ -1,0 +1,167 @@
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        var activeTab = 'profileTab';
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            var currId = $(e.target).attr("id");
+            activeTab = currId;
+        });
+
+        $("#submitBtn").on('click', function (e) {
+            switch (activeTab) {
+                case 'profileTab':
+                    $("#profileForm").submit();
+                    break;
+                case 'passwordTab':
+                    $("#passwordForm").submit();
+                    break;
+            }
+        });
+
+        $("#profileForm").on('submit', function (e) {
+            e.preventDefault();
+
+            var formData = $('#profileForm').serialize();
+            loaderShow();
+            $(this).ajaxSubmit({
+                data: formData,
+                contentType: 'application/json',
+                success: function (res) {
+                    loaderHide();
+                    if (res.status) {
+                        toastr.success(res.message);
+                        if (res.data.hasOwnProperty('redirect')) {
+                            window.location.href = res.data.redirect;
+                        }
+                    } else {                        
+                        for (var key in res.error) {
+                            $('#form').find('[name="' + key + '"]').addClass('is-invalid').after('<span class="error invalid-feedback">' + res.error[key][0] + '</span>');
+                        }
+                        toastr.error(res.message);
+                    }
+                }
+            });
+        })
+        $(document).on('submit', '#passwordForm', function (e) {
+            e.preventDefault();
+            updatePassword();
+        })
+    })
+
+    updatePassword = () => {
+        var formData = $('#passwordForm').serialize();
+        loaderShow();
+        $.ajax({
+            method: 'post',
+            data: formData,
+            url: SITEURL + '/change-password',
+            success: function (res) {
+                loaderHide();
+                if (res.status) {
+                    $("#passwordForm").trigger("reset");
+                    toastr.success(res.message);
+                    if (res.data.hasOwnProperty('redirect')) {
+                        window.location.href = res.data.redirect;
+                    }
+                } else {                    
+                    for (var key in res.error) {
+                        if(!$('#passwordForm').find('[name="' + key + '"]').hasClass('is-invalid')) {
+                            $('#passwordForm').find('[name="' + key + '"]').addClass('is-invalid').after('<span class="error invalid-feedback">' + res.error[key][0] + '</span>');
+                        }
+                    }
+                    toastr.error(res.message);
+                }
+            }
+        })
+    }
+
+    /// drop-effect
+    initDropEffect = (box) => {
+        let area, drop, areaWidth, areaHeight, maxDistance, dropWidth, dropHeight, x, y;
+
+        fireRipple = (e) => {
+            area = e.currentTarget
+            // create drop
+            if (!drop) {
+                drop = document.createElement('span');
+                drop.className = 'drop';
+                this.appendChild(drop);
+            }
+            // reset animate class
+            drop.className = 'drop';
+
+            // calculate dimensions of area (longest side)
+            areaWidth = getComputedStyle(this, null).getPropertyValue("width");
+            areaHeight = getComputedStyle(this, null).getPropertyValue("height");
+            maxDistance = Math.max(parseInt(areaWidth, 10), parseInt(areaHeight, 10));
+
+            // set drop dimensions to fill area
+            drop.style.width = maxDistance + 'px';
+            drop.style.height = maxDistance + 'px';
+
+            // calculate dimensions of drop
+            dropWidth = getComputedStyle(this, null).getPropertyValue("width");
+            dropHeight = getComputedStyle(this, null).getPropertyValue("height");
+
+            // calculate relative coordinates of click
+            // logic: click coordinates relative to page - parent's position relative to page - half of self height/width to make it controllable from the center
+            x = e.pageX - this.offsetLeft - (parseInt(dropWidth, 10) / 2);
+            y = e.pageY - this.offsetTop - (parseInt(dropHeight, 10) / 2) - 30;
+
+            // position drop and animate
+            drop.style.top = y + 'px';
+            drop.style.left = x + 'px';
+            drop.className += ' animate';
+            e.stopPropagation();
+        }
+        // get clickable area for drop effect
+        area = box.querySelector('.js--image-preview');
+        area.addEventListener('click', fireRipple);
+    }
+
+    initImageUpload = (box) => {
+        let uploadField = box.querySelector('.image-upload');
+
+        getFile = (e) => {
+            let file = e.currentTarget.files[0];
+            checkType(file);
+        }
+
+        uploadField.addEventListener('change', getFile);
+
+        previewImage = (file) => {
+            let thumb = box.querySelector('.js--image-preview'),
+                reader = new FileReader();
+
+            reader.onload = () => {
+                thumb.style.backgroundImage = 'url(' + reader.result + ')';
+            }
+            reader.readAsDataURL(file);
+            thumb.className += ' js--no-default';
+        }
+
+        checkType = (file) => {
+            let imageType = /image.*/;
+            if (!file.type.match(imageType)) {
+                throw 'Invalid file type';
+            } else if (!file) {
+                throw 'No file uploaded';
+            } else {
+                previewImage(file);
+            }
+        }
+
+    }
+
+    // initialize box-scope
+    var boxes = document.querySelectorAll('.box');
+
+    for (let i = 0; i < boxes.length; i++) {
+        let box = boxes[i];
+        initDropEffect(box);
+        initImageUpload(box);
+    }
+
+</script>

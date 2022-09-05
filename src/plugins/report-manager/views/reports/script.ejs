@@ -1,0 +1,74 @@
+<script>
+	$(document).ready(function () {
+		var queryStrings = window.location.search.replace("?", "");
+		listAndSearch(queryStrings);
+		$(document).on("submit", "#search", function (e) {
+			e.preventDefault();
+			document.getElementById("page").value = 1;
+			listAndSearch();
+		});
+		$(document).on("click", ".page-link", function (e) {
+			var page = this.getAttribute("data-page");
+			if (+page) {
+				setTimeout(function () {
+					listAndSearch();
+				}, 0);
+			}
+		});
+		$(document).on("click", "#reset", function (e) {
+			document.getElementById("search").reset();
+			document.getElementById("page").value = 1;
+			listAndSearch();
+		});
+	});
+	listAndSearch = (queryString) => {
+		var query = queryString || $("#search").serialize();
+		document.getElementById("table-content").innerHTML = rowLoader(7);
+		loaderShow();
+		$.ajax({
+			method: "get",
+			data: query,
+			url: "/report-manager/list",
+			success: function (res) {
+				loaderHide();
+				if (res.status) {
+					buildTable(res.data.result);
+					buildPagination(res.data, document.getElementById("page").value);
+					updateArgsWithQueryStrings(query);
+				}
+			},
+		});
+	};
+	buildTable = (data) => {
+		var table = document.getElementById("table-content");
+		document.getElementById("table-content").innerHTML = "";
+		for (var i = 0; i < data.length; i++) {
+			var row = table.insertRow(i);
+			var c2 = row.insertCell(0);
+			var c3 = row.insertCell(1);
+			var c4 = row.insertCell(2);
+			var c6 = row.insertCell(3);
+			var c7 = row.insertCell(4);
+			var c8 = row.insertCell(5);
+			c2.innerHTML = data[i]["displayName"];
+			c3.innerHTML = data[i]["email"];
+			c4.innerHTML = data[i]["nftId"];
+			c6.innerHTML = data[i]["reason"];
+			c7.innerHTML = getDate(data[i]["date"]);
+			var id = data[i]["_id"];
+			c8.innerHTML =
+				' <a href="/report-manager/edit/' +
+				id +
+				'" class="btn btn-primary btn-xs">Edit</a><a style="margin: 0px 6px;" href="/report-manager/view/' +
+				id +
+				'" class="btn btn-info btn-xs">View</a>';
+		}
+	};
+	getDate = (date) => {
+		if (!date) {
+			return "";
+		} else {
+			return (new Date(`${date}`).toLocaleString(undefined, {timeZone: 'Asia/Kolkata'}));
+		}
+	};
+</script>

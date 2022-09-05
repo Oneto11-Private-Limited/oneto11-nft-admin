@@ -1,0 +1,152 @@
+<script>
+    $(document).ready(function() {
+        $('#sell-table').DataTable();
+    })
+
+    var web3 = new Web3(Web3.givenProvider || "https://polygon-rpc.com/");
+    async function cancel(tokenid){
+        let owner = await contract.methods.owner().call();
+        if(owner.toLowerCase() == (window.ethereum.selectedAddress).toLowerCase()){
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You want to canel this token Id :"+tokenid,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, cancel it!'
+            }).then(async (result) => {
+            if (result.value) {
+            await contract.methods.cancelSell(Number(tokenid)).send({
+                from: window.ethereum.selectedAddress    
+            },function  (err,result){
+                Swal.fire({
+                    title:'cancel!',
+                    text:'Your transaction is sent, Please wait for confirmation.',
+                    icon:'success'
+                }
+                ).then(function(){
+                window.location.reload();
+                                    })
+            })
+
+            
+            }
+            })
+        }else{
+            Swal.fire({
+                    title:'Failed!',
+                    text:'Only owner can cancel the sell',
+                    icon:'success'
+                })
+        }
+        
+ }   
+
+ async function cancelOfferEnable(){
+        let owner = await contract.methods.owner().call();
+        let checkEnable = await contract.methods.getCancelOfferEnabled().call();
+        let changeText = checkEnable ? 'disable':'enable';
+        if(window.ethereum.selectedAddress !== null && window.ethereum.selectedAddress !== undefined && window.ethereum.selectedAddress !== ''){
+            if(owner.toLowerCase() == (window.ethereum.selectedAddress).toLowerCase()){
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You want to "+changeText+" cancel offer",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!'
+                }).then(async (result) => {
+                    if (result.value) {
+                        console.log(window.ethereum.selectedAddress)
+                        await contract.methods.cancelOfferEnable().send({
+                            from: window.ethereum.selectedAddress    
+                        },function  (err,result){
+                            Swal.fire({
+                                title:'Proceeding!',
+                                text:'Your transaction is sent, Please wait for confirmation.',
+                                icon:'success'
+                            }
+                            ).then(function(){
+                                window.location.reload();
+                            })
+                        })
+                    }
+                })
+            }else{
+                Swal.fire({
+                        title:'Failed!',
+                        text:'Only owner can '+changeText+' cancel bid',
+                        icon:'success'
+                    })
+            }
+
+        }else{
+            Swal.fire({
+                    title:'Failed!',
+                    text:'Please connect to wallet first',
+                    icon:'error'
+                })
+        }
+        
+    }
+
+    async function setOfferFee(){
+        let percent = $("#offerFee").val();
+        let owner = await contract.methods.owner().call();
+        if(window.ethereum.selectedAddress !== null && window.ethereum.selectedAddress !== undefined && window.ethereum.selectedAddress !== ''){
+            if(owner.toLowerCase() == (window.ethereum.selectedAddress).toLowerCase()){
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You want to set bid fee "+percent+" percent",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!'
+                }).then(async (result) => {
+                    if (result.value) {
+                        await contract.methods.setCancelOfferFee(Number(percent)).send({
+                            from: window.ethereum.selectedAddress    
+                        },function  (err,result){
+                            Swal.fire({
+                                title:'Set offer fee!',
+                                text:'Your transaction is sent, Please wait for confirmation.',
+                                icon:'success'
+                            }
+                            ).then(function(){
+                                window.location.reload();
+                            })
+                        })
+                    }
+                })
+            }else{
+                Swal.fire({
+                        title:'Failed!',
+                        text:'Only owner can cancel the auction',
+                        icon:'error'
+                    })
+            }
+        }else{
+            Swal.fire({
+                    title:'Failed!',
+                    text:'Please connect to wallet first',
+                    icon:'error'
+                })
+        }
+        
+    }
+
+    var offer_cancel = async() => {
+        let data = await contract.methods.getCancelOfferEnabled().call();
+        if(data){
+            document.getElementById('enable_offer_text').innerHTML = 'Disable Cancel Offer';
+        }else{
+            document.getElementById('enable_offer_text').innerHTML = 'Enable Cancel Offer';
+        }
+    };
+    offer_cancel();
+   
+        
+</script>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oneto11</title>
+    <link rel="stylesheet" href="/public/plugins/fontawesome-free/css/all.min.css" />
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
+    <!-- Tempusdominus Bbootstrap 4 -->
+    <link rel="stylesheet" href="/public/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" />
+    <!-- iCheck -->
+    <link rel="stylesheet" href="/public/plugins/icheck-bootstrap/icheck-bootstrap.min.css" />
+    <!-- JQVMap -->
+    <link rel="stylesheet" href="/public/plugins/jqvmap/jqvmap.min.css" />
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/public/dist/css/adminlte.css" />
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="/public/plugins/overlayScrollbars/css/OverlayScrollbars.min.css" />
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="/public/plugins/daterangepicker/daterangepicker.css" />
+    <!-- summernote -->
+    <link rel="stylesheet" href="/public/plugins/summernote/summernote-bs4.css" />
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" />
+    <link rel="stylesheet" href="/public/plugins/toastr/toastr.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/placeholder-loading/dist/css/placeholder-loading.min.css">
+    <link rel="stylesheet" href="/public/plugins/sweetalert2/sweetalert2.min.css" />
+    <link rel="stylesheet" href="/public/plugins/select2/css/select2.min.css" />
+    <link rel="stylesheet" href="/public/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css" />
+    <link rel="stylesheet" href="/public/css/custom.css" />
+    
+    <link rel="icon" type="image/x-icon" href="/public/images/icon.png">
+    
+    <script src="/public/plugins/jquery/jquery.min.js"></script>
+    <% for(var i in css_files){ %>
+        <link rel="stylesheet" href="<%- css_files[i] %>">
+    <% } %>
+    <% for(var i in js_files){ %>
+        <script src="<%- js_files[i] %>"></script>        
+    <% } %>
+    <script>
+        const conf = {ITEMS_PER_PAGE:'<%- ITEMS_PER_PAGE %>'};
+        const SITEURL = '<%- SITEURL %>';
+    </script>
+</head>
+<% 
+        var body_small_text = theme.find(res=>{return res.key=='body_small_text'}) 
+        body_small_text_class = body_small_text && body_small_text.value!='0' ? body_small_text.value:'';
+    %>
+<body class="hold-transition sidebar-mini layout-fixed <%- body_small_text_class %>">
+    <div class="wrapper">
+        <%- include('../partials/header',{...misc,...auth}); %>
+        
+        <%- include('../partials/sidebar',{...misc,...auth, configure:configure}); %>
+        <div class="content-wrapper">
+            <%- body %>
+        </div>
+        <%- include('../partials/toast'); %>
+        <%- include('../partials/footer',{...misc}); %>
+    </div>
+    
+    <!-- jQuery UI 1.11.4 -->
+    <script src="/public/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script src="/public/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/public/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <script src="/public/plugins/sweetalert2/sweetalert2.min.js" ></script>
+    <script src="/public/plugins/select2/js/select2.min.js"></script>
+    <script src="/public/plugins/daterangepicker/moment.min.js"></script>
+    <script src="/public/plugins/daterangepicker/daterangepicker.js"></script>
+    <!-- AdminLTE App -->
+    <script src="/public/dist/js/adminlte.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="/public/js/custom.js"></script>
+    <script src="/public/plugins/toastr/toastr.min.js"></script>
+</body>
+
+</html>

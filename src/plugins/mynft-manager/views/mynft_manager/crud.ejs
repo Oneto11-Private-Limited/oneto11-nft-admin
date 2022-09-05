@@ -1,0 +1,56 @@
+<script>
+    $(document).ready(function() {
+
+
+        $(document).on('submit', '#form', function(e) {
+            e.preventDefault();
+            addOrUpdate();
+        })
+
+       
+        
+        
+    })
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#imagePreview').css('background-image', 'url(' + e.target.result + ')');
+                $('#imagePreview').hide();
+                $('#imagePreview').fadeIn(650);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $("#imageUpload").change(function () {
+        readURL(this);
+    });
+    
+
+    addOrUpdate = () => {
+        var formData = $('#form').serialize();
+        loaderShow();
+        $.ajax({
+            method: 'post',
+            data: formData,
+            url: SITEURL + '/nft-manager/update',
+            success: function(res) {
+                loaderHide();
+                if (res.status) {
+                    $("#form").trigger("reset");
+                    toastr.success(res.message);
+                    if (res.data.hasOwnProperty('redirect')) {
+                        window.location.href = res.data.redirect;
+                    }
+                } else {
+                    if(res.error && res.error.errors)
+                    for (var key in res.error.errors) {
+                        $('#form').find('[name="' + key + '"]').addClass('is-invalid').after('<span class="error invalid-feedback">' + res.error.errors[key][0] + '</span>');
+                    }
+                    toastr.error(res.message);
+                }
+            }
+        })
+    }
+</script>

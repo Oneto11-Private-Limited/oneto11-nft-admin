@@ -1,0 +1,22 @@
+.login-page {
+    /* background-color: #000000;
+    background-image: linear-gradient(147deg, #FFF 0%,#04619f 74%); */
+   background-color :#000000;
+/*background-image :linear-gradient(315deg, #000000 0%, #7f8c8d 74%);*/
+/* background-color: #ffa69e;
+background-image: linear-gradient(315deg, #ffa69e 0%, #5d4954 74%);*/
+} 
+
+.login-logo a,.login-page{color: white;}
+.login-page .form-group{position: relative;}
+.login-page .card{background-color: rgba(255,255,255,.5);}
+.login-page .login-card-body{background-color: #bdb5b5;}
+.css-logo img {
+    max-width: 120px;
+}
+.button-wrapper{
+    justify-content: space-between;
+}
+.auction-three-button{
+    display: flex;
+}

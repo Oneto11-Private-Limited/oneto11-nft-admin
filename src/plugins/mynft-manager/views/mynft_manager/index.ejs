@@ -1,0 +1,67 @@
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"><%- misc.title%></h1>
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+                    <li class="breadcrumb-item">My NFT Manager</li>                    
+                </ol>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                    <button id="mint_btn1" onclick="unlock()" style="background-color: #343a40;color: white;border: none;padding: 8px;width: 20%;">Connect Wallet </button>
+                    <% if(!connectedStatus){%>
+                        <div class="error"><%=status%></div>
+                    <%}%>   
+                </div>
+                    
+                    
+
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        
+          <div class="table-responsive">
+            <table id="nft-table" style="width:100%" class="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>External Url</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+              
+               
+               
+               
+                
+              </tbody>
+            </table>
+          </div>
+        
+
+                    </div>
+                    <!-- /.card-body -->
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<%- include('./script.ejs')%>

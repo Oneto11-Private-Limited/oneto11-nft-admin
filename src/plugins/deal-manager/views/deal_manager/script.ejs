@@ -1,0 +1,49 @@
+<script>
+    $(document).ready(function() {
+        $('#deal-table').DataTable();
+    })
+   
+    var web3 = new Web3(Web3.givenProvider || "https://polygon-rpc.com/");
+
+    async function cancel(tokenid){
+        let dealDetails = await contract.methods.owner().call();
+    
+        if(dealDetails.toLowerCase() == (window.ethereum.selectedAddress).toLowerCase()){
+            Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to canel this token Id :"+tokenid,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, cancel it!'
+            }).then(async (result) => {
+            if (result.value) {
+            await contract.methods.cancelDeal(Number(tokenid)).send({
+                from: window.ethereum.selectedAddress    
+            },function  (err,result){
+                Swal.fire({
+                    title:'cancel!',
+                    text:'Your transaction is sent, Please wait for confirmation.',
+                    icon:'success'
+                }
+                ).then(function(){
+                window.location.reload();
+                })
+            })
+
+            
+            }
+            })
+        }else{
+            Swal.fire({
+                    title:'Failed!',
+                    text:'Only owner can cancel the deal',
+                    icon:'success'
+                })
+        }
+        
+ }   
+   
+        
+</script>

@@ -1,0 +1,84 @@
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js"></script> 
+<script>
+    /**
+ *	Function for custom ajax submit
+ *
+ * 	@param var formId 	As form id for submitting form
+ * 	@param var callback As Callback Function
+ *
+ *	@return null
+ */
+function ajax_submit(formId,callback){
+	var options = {
+        url: '/cms-manager/update',
+        
+		success:function(response){
+			if(response.status == 'success'){
+				callback(true,response);
+			}else{
+				//display_errors(response.message,formId);
+				callback(false,response);
+			}
+		},
+		resetForm:false
+	};
+	$("form#"+formId).ajaxSubmit(options);
+}//end ajax_submit()
+
+$(document).ready(function(){
+        /**
+        * Function to submit add Manager page
+        */
+    	$(document).on('submit', '#form', function(e) {
+            e.preventDefault();
+            //var btnId = $(this).attr("id");
+    		//startTextLoading(btnId);
+    		ajax_submit("form",function(status,res){
+    			loaderHide();
+                    if (res.status) {
+                        $("#form").trigger("reset");
+                        toastr.success(res.message);
+                        if (res.data.hasOwnProperty('redirect')) {
+                            window.location.href = res.data.redirect;
+                        }
+                    } else {
+                        for (var key in res.error) {
+                            $('#form').find('[name="' + key + '"]').addClass('is-invalid').after('<span class="error invalid-feedback">' + res.error[key][0] + '</span>');
+                        }
+                        toastr.error(res.message);
+                    }
+    		});
+        });
+    });
+
+
+</script>
+
+<script>
+
+    $(document).ready(function() {
+        var tags = [];
+        tags.forEach.call(document.querySelectorAll('input[type="tags"]'), tagsInput);
+    })
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#imagePreview').css('background-image', 'url(' + e.target.result + ')');
+                $('#imagePreview').hide();
+                $('#imagePreview').fadeIn(650);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $("#imageUpload").change(function () {
+        readURL(this);
+    });
+
+
+    
+
+   
+</script>

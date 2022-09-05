@@ -1,0 +1,46 @@
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
+
+<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#imagePreview').css('background-image', 'url(' + e.target.result + ')');
+                $('#imagePreview').hide();
+                $('#imagePreview').fadeIn(650);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $("#imageUpload").change(function () {
+        readURL(this);
+    });
+
+    $(document).ready(function () {
+        $("#form").on('submit', function (e) {
+            e.preventDefault();
+
+            var formData = $('#form').serialize();
+            loaderShow();
+            $(this).ajaxSubmit({
+                data: formData,
+                contentType: 'application/json',
+                success: function (res) {
+                    loaderHide();
+                    if (res.status) {                        
+                        toastr.success(res.message);
+                        if (res.data.hasOwnProperty('redirect')) {
+                            window.location.href = res.data.redirect;
+                        }
+                    } else {                        
+                        for (var key in res.error) {
+                            $('#form').find('[name="' + key + '"]').find('span.error').remove();                            
+                            $('#form').find('[name="' + key + '"]').addClass('is-invalid').after('<span class="error invalid-feedback">' + res.error[key][0] + '</span>');
+                        }
+                        toastr.error(res.message);
+                    }
+                }
+            });
+        })
+    })    
+</script>

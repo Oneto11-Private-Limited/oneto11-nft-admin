@@ -1,0 +1,67 @@
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">
+                    <%- misc.title%>
+                </h1>
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="/deal-manager">Deal Manager</a></li>
+                    <li class="breadcrumb-item">Add</li>
+                </ol>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card card">
+
+                    <div class="card-header">
+                        <!-- <div class="card-tools"> -->
+                            <button id="mint_btn1" onclick="unlock()" style="background-color: #343a40;color: white;border: none;padding: 8px;width: 20%;">Connect Wallet </button>
+                        <!-- </div> -->
+                    </div>
+                    <form id="form" novalidate>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-12 form-group">
+                                    <label for="name">NFT ID <small class="text-danger">*</small></label>
+                                    <input type="number" data-validate-field="nft_id" id="nft_id" name="nft_id" placeholder="NFT ID" class="form-control">
+                                </div>
+                                <div class="col-sm-12 form-group">
+                                    <label for="name">Start Date<small class="text-danger">*</small></label>
+                                    <input type="text" data-validate-field="start_data"  name="start_date" id="start-date" placeholder="Start Date" class="form-control">
+                                    
+                                </div>
+                                <div class="col-sm-12 form-group">
+                                    <label for="name">End Date <small class="text-danger">*</small></label>
+                                    <input type="text" data-validate-field="end_date"  name="end_date" id="end-date" placeholder="End Date" class="form-control">
+                                   
+                                </div>
+                                <div class="col-sm-12 form-group">
+                                    <label for="meta_title">Starting Price <small class="text-danger">*</small></label>
+                                    <input type="number" data-validate-field="end_date" id="price" name="price" placeholder="Price" class="form-control">
+                                </div>                                                                
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<%- include('./crud.ejs')%>

@@ -1,0 +1,98 @@
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"><%- misc.title%></h1>
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+                    <li class="breadcrumb-item">Sell Manager</li>                    
+                </ol>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-tools w-100">
+                            
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="input-group-append mx-2">
+                                            <button id="mint_btn1" onclick="unlock()"
+                                            style="background-color: #343a40;color: white;border: none;padding: 8px;width: 20%;">Connect Wallet </button
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 d-flex justify-content-end ">
+                                        
+                                            <div class="input-group-append mx-2">
+                                                <input class = "mx-2" type = "number" id="offerFee"/>
+                                                <button onclick = "setOfferFee()" class="btn btn-default"
+                                                    >Set Offer Fee</button
+                                                >
+                                            </div>
+                                            <div class="input-group-append mx-2">
+                                                <button id ="enable_offer_text" onclick = "cancelOfferEnable()" class="btn btn-default"
+                                                    >Enable Cancel Offer</button
+                                                >
+                                            </div>
+                                            <div class="input-group-append">
+                                                <a href="/sell-manager/add" class="btn btn-default"><i class="fas fa-plus"></i> Add New</a>
+                                            </div>
+                                        
+                                    </div>
+                                </div>
+                              
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        
+          <div class="table-responsive">
+            <table id="sell-table" style="width:100%" class="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th>Token Id</th>
+                  <th>Price</th>
+                  <th>Offer Price</th>
+                  <th>Seller Address</th>
+                  <th>Offerer Address</th>
+                  <th>Action</th>
+              </thead>
+              <tbody>
+                <% for(let item of data){ %>
+									<tr>
+										<td><%= item.tokenId %></td>
+										<td><%= convertPrice(item.price/1000000000000000000) %></td>
+										<td><%= convertPrice(item.offerInfo['price']/1000000000000000000) %></td>
+                    <td><%= item.seller %></td>
+										<td><%= item.offerInfo['offerer'] %></td>
+                                        <td><button onclick="cancel('<%= item.tokenId %>')">Cancel</button></td>
+									
+									</tr>
+									<% } %>
+              </tbody>
+            </table>
+          </div>
+        
+
+                    </div>
+                    <!-- /.card-body -->
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<%- include('./script.ejs')%>
+<%- include('./crud.ejs')%>

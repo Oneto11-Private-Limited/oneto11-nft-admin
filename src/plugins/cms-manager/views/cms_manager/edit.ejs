@@ -1,0 +1,59 @@
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">
+                    <%- misc.title%>
+                </h1>
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="/cms-manager">CMS Manager</a></li>
+                    <li class="breadcrumb-item">Edit</li>
+                </ol>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card card">
+
+                    <div class="card-header">
+                        <a href="/cms-manager" class="btn btn-default btn-sm">CMS Manager</a>
+                        
+                        
+                    </div>
+                    <form id="form" novalidate method="POST" role="form" enctype="mutlipart/form-data">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-6 form-group">
+                                    <label for="name">Name</label>
+                                    <input type="hidden" name="id" value="<%= result._id %>">
+                                    <input type="text" name="name" value="<%= result.name %>" placeholder="Name" class="form-control">
+                                </div>
+                                <div class="col-sm-12 form-group">
+                                    <textarea class="js-ck-editor form-control" name="content"> <%= result.content %></textarea>
+                                </div>
+                                                               
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary btn-sm" id="btn-submit-data">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<%- include('./crud.ejs')%>

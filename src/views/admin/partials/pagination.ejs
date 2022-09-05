@@ -1,0 +1,16 @@
+<div class="card-footer clearfix">
+    <small class="pagination-metadata">1 out of 100 records</small>
+    <ul class="pagination pagination-sm m-0 float-right" id="pagination">
+        <li class="page-item"><a class="page-link" data-page="0">First</a></li>
+        <li class="page-item"><a class="page-link" data-page="#">Last</a></li>
+    </ul>    
+</div>
+<script>
+    $(document).ready(function() {
+        $(document).on('click', '.page-link', function(e) {
+            var page = this.getAttribute('data-page');
+            document.getElementById('page').value = page;
+            setActivePage(this);
+        })
+    })    
+</script>

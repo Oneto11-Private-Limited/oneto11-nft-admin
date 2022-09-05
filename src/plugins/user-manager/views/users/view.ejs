@@ -1,0 +1,103 @@
+<div class="content-header">
+	<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+				<h1 class="m-0 text-dark"><%- misc.title %></h1>
+			</div>
+			<!-- /.col -->
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-right">
+					<li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+					<li class="breadcrumb-item">
+						<a href="/user-manager">Users</a>
+					</li>
+					<li class="breadcrumb-item">View</li>
+				</ol>
+			</div>
+			<!-- /.col -->
+		</div>
+		<!-- /.row -->
+	</div>
+	<!-- /.container-fluid -->
+</div>
+
+<section class="content">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-12">
+				<div class="card card">
+					<div class="card-header">
+						<a href="/user-manager" class="btn btn-default btn-sm"
+							>Users</a
+						>
+						<a
+							class="btn btn-default btn-sm"
+							href="<%- '/user-manager/edit/'+result._id %>"
+							>Edit</a
+						>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col-sm-12">
+								<h3>Name : <b><%- result.name %></b></h3>
+							</div>
+							<div class="col-sm-6">
+								<table class="mytable table table-hover table-bordered">
+									<tbody>
+										<tr>
+											<th>Name</th>
+											<td><%- result.displayName %></td>
+										</tr>
+										<tr>
+											<th>Email</th>
+											<td><%- result.email %></td>
+										</tr>
+										<tr>
+											<th>Created</th>
+                                            <td>
+                                                <% const convertedDate = (new Date(`${result.date}`).toLocaleString(undefined, {timeZone: 'Asia/Kolkata'})) %>
+                                                
+												<%- convertedDate %>
+											</td>
+                                            
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="col-sm-6">
+								<div class="card">
+									<div class="card-body" style="text-align: center">
+										<% if(result.profileImage){ %>
+										<img style="width: 200px;"
+											src="https://techyroots.com/polygonApi/assets/images/<%- result.profileImage %>"
+											class="profile-user-img img-fluid img-circle"
+										/>
+										<% }else{ %>
+										<img
+											src="/public/dist/img/avatar.png"
+											class="profile-user-img img-fluid img-circle"
+										/>
+										<% } %>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card-footer">
+						<a
+							class="btn btn-info btn-sm"
+							href="/user-manager/edit/<%- result._id %>""
+							>Edit</a
+						>
+						<a
+							class="btn btn-default btn-sm"
+							href="/user-manager"
+							>Back</a
+						>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<%- include('./crud.ejs')%>

@@ -1,0 +1,80 @@
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">
+                    <%- misc.title%>
+                </h1>
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="/nft-manager">NFT Manager</a></li>
+                    <li class="breadcrumb-item">Add</li>
+                </ol>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card card">
+
+                    <div class="card-header">
+                        <!-- <div class="card-tools"> -->
+                        <a href="/auction-manager" class="btn btn-default btn-sm">Auction Manager</a>
+                        <!-- </div> -->
+                    </div>
+                    <form id="form" novalidate>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-12 form-group">
+                                    <label for="name">Name <small class="text-danger">*</small></label>
+                                    <input type="text" name="name" placeholder="Name" class="form-control">
+                                </div>
+                                <div class="col-sm-12 form-group">
+                                    <label for="name">Title<small class="text-danger">*</small></label>
+                                    <input type="text" name="title" id="title" placeholder="title" class="form-control">
+                                    
+                                </div>
+                                <div class="col-sm-12 form-group">
+                                    <label for="name">Property<small class="text-danger">*</small></label>
+                                    <input type="text" name="property" id="property" placeholder="property" class="form-control">
+                                    
+                                </div>
+                                <div class="col-sm-12 form-group">
+                                    <label for="subject">Detail <small class="text-danger">*</small></label>
+                                    <textarea class="js-ck-editor form-control" name="detail"></textarea>
+                                </div>
+                                <div class="col-sm-4 form-group">
+                                    <label for="password">Feature Image</label>
+                                    <div class="avatar-upload">
+                                        <div class="avatar-edit">
+                                            <input type="file" id="imageUpload" name="feature_image" accept=".png, .jpg, .jpeg" />
+                                            <label for="imageUpload"></label>
+                                        </div>
+                                        <div class="avatar-preview">
+                                            <div id="imagePreview" style="background-image: url('/public/dist/img/no_image.png');">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>                                                                
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<%- include('./crud.ejs')%>

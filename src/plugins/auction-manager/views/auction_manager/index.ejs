@@ -1,0 +1,110 @@
+<div class="content-header">
+	<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+				<h1 class="m-0 text-dark"><%- misc.title%></h1>
+			</div>
+			<!-- /.col -->
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-right">
+					<li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+					<li class="breadcrumb-item">
+						Auction Manager 
+					</li>
+				</ol>
+			</div>
+			<!-- /.col -->
+		</div>
+		<!-- /.row -->
+	</div>
+	<!-- /.container-fluid -->
+</div>
+<section class="content">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-12">
+				<div class="card">
+					<div class="card-header">
+						<div class="card-tools w-100">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="input-group-append mx-2">
+                                        <button id="mint_btn1" onclick="unlock()"
+                                        style="background-color: #343a40;color: white;border: none;padding: 8px;width: 20%;">Connect Wallet </button
+                                        >
+                                    </div>
+                                </div>
+                                <div class="col-md-6 d-flex justify-content-end ">
+                                    <div class="input-group-append mx-2">
+                                        <input class = "mx-2" type = "number" id="bidFee"/>
+                                        <button onclick = "setBidFee()" class="btn btn-default"
+                                            >Set Bid Fee</button
+                                        >
+                                    </div>
+                                    <div class="input-group-append mx-2">
+                                        <button id = "enable_bid_text" onclick = "cancelBidEnable()" class="btn btn-default"
+                                            >Enable Cancel Bid</button
+                                        >
+                                    </div>
+                                    <div class="input-group-append">
+                                        <a href="/auction-manager/add" class="btn btn-default"
+                                            ><i class="fas fa-plus"></i> Add New</a
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+						</div>
+					</div>
+					<!-- /.card-header -->
+					<div class="card-body">
+						<div class="table-responsive">
+							<table
+								id="auction-table"
+								style="width: 100%"
+								class="table table-striped table-bordered"
+							>
+								<thead>
+									<tr>
+										<th>NFT IDs</th>
+										<th>Price</th>
+										<th>Start Time</th>
+										<th>End Time</th>
+										<th>Highest Bid</th>
+										<th>Total Bids</th>
+										<th>Highest Bidder</th>
+										<th>Action</th>
+									</tr>
+								</thead>
+								<tbody>
+									<% for(let item of data){ %>
+									<tr>
+										<td><a href="/auction-manager/view/<%=item.token%>"><%= item.token %></a></td>
+										<td><%= convertPrice(item.price/1000000000000000000) %></td>
+										<td><%= timeConverter(item.startTime) %></td>
+										<td><%= timeConverter(item.endTime) %></td>
+										<td><a href="auction-manager/histroy/<%=item.token%>/<%=item.highestBidder %>"><%= convertPrice(item.highestBid/1000000000000000000) %></a></td>
+										<td><a href="auction-manager/histroy/<%=item.token%>/<%=item.highestBidder %>"><%= item.totalBids %></a></td>
+										<td>
+											<% if(item.userData && item.userData['displayName']){%>
+												<a href="/user-manager/view/<%=item.userData['_id']%>"><%= item.userData['displayName']%></a>
+											<%}else{%>
+												<%= item.highestBidder %>
+											<%}%>
+											</td>
+											
+										
+										<td><button onclick="cancel('<%= item.token %>')">Cancel</button></td>
+									</tr>
+									<% } %>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!-- /.card-body -->
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<%- include('./script.ejs')%>
+<%- include('./crud.ejs')%>

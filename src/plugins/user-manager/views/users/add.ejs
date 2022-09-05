@@ -1,0 +1,94 @@
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">
+                    <%- misc.title%>
+                </h1>
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="/admin/user-manager">Users</a></li>
+                    <li class="breadcrumb-item">Add</li>
+                </ol>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card card">
+
+                    <div class="card-header">
+                        <!-- <div class="card-tools"> -->
+                        <a href="/admin/user-manager" class="btn btn-default btn-sm">Users</a>
+                        <!-- </div> -->
+                    </div>
+                    <form id="form" enctype="multipart/form-data" method="post" action="/admin/user-manager/update" novalidate>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-4 form-group">
+                                    <label for="username">Username</label>
+                                    <input type="text" id="username" name="username" placeholder="Username" class="form-control">
+                                </div>
+                                <div class="col-sm-4 form-group">
+                                    <label for="name">Name</label>
+                                    <input type="text" id="name" name="name" placeholder="Full name" class="form-control">
+                                </div>
+                                <div class="col-sm-4 form-group">
+                                    <label for="name">Gender</label>
+                                    <select name="gender" class="js-select2 form-control">
+                                        <option value="1">Male</option>
+                                        <option value="0">Female</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-6 form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" id="email" name="email" placeholder="Email" class="form-control">
+                                </div>
+
+                                <div class="col-sm-6 form-group">
+                                    <label for="password">Password</label>
+                                    <input type="password" id="password" name="password" placeholder="Password" class="form-control">
+                                </div>
+                                <div class="col-sm-2 form-group">
+                                    <label for="password">Profile picture</label>
+                                    <div class="avatar-upload">
+                                        <div class="avatar-edit">
+                                            <input type="file" id="imageUpload" name="profile_picture" accept=".png, .jpg, .jpeg" />
+                                            <label for="imageUpload"></label>
+                                        </div>
+                                        <div class="avatar-preview">
+                                            <div id="imagePreview" style="background-image: url('/public/dist/img/avatar.png');">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4 form-group">
+                                    <div class="custom-control custom-switch custom-switch-on-info">
+                                        <input type="checkbox" value="1" class="custom-control-input" name="status" id="customSwitch1">
+                                        <label class="custom-control-label" for="customSwitch1">Status</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<%- include('./crud.ejs')%>

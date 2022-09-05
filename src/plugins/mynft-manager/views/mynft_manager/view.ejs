@@ -1,0 +1,73 @@
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">
+                    <%- misc.title %>
+                </h1>
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="/nft-manager">NFT Detail</a></li>
+                    <li class="breadcrumb-item">View</li>
+                </ol>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card card">
+
+                    <div class="card-header">
+                        <a href="/nft-manager" class="btn btn-default btn-sm">NFT</a>
+                        
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            
+                            
+                            <div class="col-sm-4">
+                                <div class="card">
+                                    <div class="card-body" style="text-align:center">
+                                        <% if (nftData[0] && nftData[0].ipfs){%>
+                                            <img src="<%=nftData[0].ipfs.image%>" style="width: 50%;">
+                                        <%}%>
+                                       
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-8">
+                                <div class="card">
+                                    <div class="card-body" style="text-align:center">
+                                        <h4>NFT Name : <%= nftData[0].ipfs ? nftData[0].ipfs.name : '' %></h4>
+                                        <h4>Likes : <%= like ? like : 0%></h4>
+                                        <h4>NFT Details :<br/> <%- nftData[0].ipfs ? nftData[0].ipfs.description : '' %></h4>
+                                       
+                                        
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="card-footer">
+                       
+                        <a class="btn btn-default btn-sm" href="/nft-manager">Back</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<%- include('./crud.ejs')%>

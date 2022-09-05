@@ -1,0 +1,10 @@
+
+<% 
+var footer_small_text = theme.find(res=>{return res.key=='footer_small_text'}) 
+footer_small_text_class = footer_small_text && footer_small_text.value!='0' ? footer_small_text.value:'';
+%>
+<footer class="main-footer <%- footer_small_text_class %>">
+Copyright &copy; <%- new Date().getFullYear()%>  All rights reserved.
+
+</footer>
+<aside class="control-sidebar control-sidebar-dark"></aside>

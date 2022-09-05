@@ -1,0 +1,81 @@
+<script>
+	$(document).ready(function () {
+		var queryStrings = window.location.search.replace("?", "");
+		listAndSearch(queryStrings);
+		$(document).on("submit", "#search", function (e) {
+			e.preventDefault();
+			document.getElementById("page").value = 1;
+			listAndSearch();
+		});
+		$(document).on("click", ".page-link", function (e) {
+			var page = this.getAttribute("data-page");
+			if (+page) {
+				setTimeout(function () {
+					listAndSearch();
+				}, 0);
+			}
+		});
+		$(document).on("click", "#reset", function (e) {
+			document.getElementById("search").reset();
+			document.getElementById("page").value = 1;
+			listAndSearch();
+		});
+	});
+	listAndSearch = (queryString) => {
+		var query = queryString || $("#search").serialize();
+		document.getElementById("table-content").innerHTML = rowLoader(7);
+		loaderShow();
+		$.ajax({
+			method: "get",
+			data: query,
+			url: "/contact-manager/list",
+			success: function (res) {
+				loaderHide();
+				if (res.status) {
+					buildTable(res.data.result);
+					buildPagination(res.data, document.getElementById("page").value);
+					updateArgsWithQueryStrings(query);
+				}
+			},
+		});
+	};
+	buildTable = (data) => {
+		var table = document.getElementById("table-content");
+		document.getElementById("table-content").innerHTML = "";
+		for (var i = 0; i < data.length; i++) {
+			var row = table.insertRow(i);
+			var c1 = row.insertCell(0);
+			var c2 = row.insertCell(1);
+			var c3 = row.insertCell(2);
+			var c4 = row.insertCell(3);
+			var c5 = row.insertCell(4);
+			var c6 = row.insertCell(5);
+			var c7 = row.insertCell(6);
+			
+			c1.innerHTML = i+1;
+			c2.innerHTML = data[i]['fullName'];
+			c3.innerHTML = data[i]["email"];
+			c4.innerHTML = `${data[i]["subject"]}`;
+			c5.innerHTML = data[i]['message'];
+			c6.innerHTML = getDate(data[i]["date"]);
+			
+			var id = data[i]["_id"];
+			c7.innerHTML =
+				
+				' <a href="/contact-manager/delete/' +
+				id +
+				'" class="js-delete-link btn btn-danger btn-xs" data-message="Are you sure you want to delete ' +
+				data[i]["fullName"] +
+				'">Delete</a><a style="margin: 0px 6px;" href="/contact-manager/view/' +
+				id +
+				'" class="btn btn-info btn-xs">View</a>';
+		}
+	};
+	getDate = (date) => {
+		if (!date) {
+			return "";
+		} else {
+			return (new Date(`${date}`).toLocaleString(undefined, {timeZone: 'Asia/Kolkata'}));
+		}
+	};
+</script>

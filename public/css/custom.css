@@ -1,0 +1,12 @@
+.select2-dropdown {
+    z-index: 99994 !important;
+}
+
+.tags-input{
+    width: 100% !important;
+    box-shadow: none !important;
+}
+.css-logo img {
+        max-width: 120px;
+}
+.brand-link .brand-image{float:none;margin:auto;}

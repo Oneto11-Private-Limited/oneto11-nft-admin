@@ -1,0 +1,377 @@
+<script>
+  var web3 = new Web3(Web3.givenProvider || "https://polygon-rpc.com/");
+  // Check Wallet Connection
+  $(document).ready(function () {
+    async function reload() {
+      if (
+        (await web3.eth.net.getNetworkType()) == "private" &&
+        window.ethereum.selectedAddress != null
+      ) {
+        document.getElementById("mint_btn1").innerHTML = "My Wallet";
+      } else {
+        document.getElementById("mint_btn1").innerHTML = "Connect Wallet";
+      }
+    }
+    setInterval(reload, 1000);
+  });
+  // Unlock the Wallet
+  async function unlock() {
+    if (typeof web3 !== "undefined") {
+      web3.givenProvider
+        .enable()
+        .then(async function (address) {
+          console.log(await web3.eth.net.getNetworkType())
+          if ((await web3.eth.net.getNetworkType()) == "private") {
+            document.getElementById("mint_btn1").innerHTML = "My wallet";
+          } else {
+            Swal.fire({
+              icon: "warning",
+              text: "Please select Polygon Mainnet",
+            });
+          }
+        })
+        .catch(function (err) {
+          Swal.fire({
+            icon: "warning",
+            text: err.message,
+          });
+        });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please install Metamask wallet",
+      });
+    }
+  }
+  // Date Range Picker
+  $(document).ready(function () {
+    $(document).on("submit", "#form", function (e) {
+      e.preventDefault();
+      addOrUpdate();
+    });
+
+    var timeFormat = "MMM DD, YYYY hh:mm A";
+    var autoUpdateInput = true;
+    if ($("#start-date").val() != "") {
+      autoUpdateInput = false;
+    }
+    $("#start-date").daterangepicker(
+      {
+        singleDatePicker: true,
+        showDropdowns: true,
+        timePicker: true,
+        startDate:new Date(),
+        autoUpdateInput: autoUpdateInput,
+        //format: 'MMM DD, YYYY',
+        autoApply: true,
+        locale: {
+          format: timeFormat,
+        },
+      },
+      function (start, end, label) {
+        $("#end-date").daterangepicker(
+          {
+            singleDatePicker: true,
+            showDropdowns: true,
+            timePicker: true,
+            minDate: start,
+            format: "MMM DD, YYYY hh:mm A",
+            autoApply: true,
+            locale: {
+              format: timeFormat,
+            },
+          },
+          function (a, b, c) {
+           $("#end-date").val(a.format("MMM DD, YYYY hh:mm A"));
+          }
+        );
+      }
+    );
+    $("#end-date").daterangepicker(
+      {
+        opens: 'down',  
+        singleDatePicker: true,
+        showDropdowns: true,
+        startDate: new Date(new Date().getTime() + 10*60000),
+        timePicker: true,
+        format: "MMM DD, YYYY hh:mm A",
+        autoApply: true,
+        locale: {
+          format: timeFormat,
+        },
+      },
+      function (a, b, c) {
+        $('.end-date').val(a.format('MMM DD, YYYY'));
+      }
+    );
+  });
+  // Convert Price
+  convertPrice = (n) => {
+    var sign = +n < 0 ? "-" : "",
+      toStr = n.toString();
+    if (!/e/i.test(toStr)) {
+      return n;
+    }
+    var [lead, decimal, pow] = n
+      .toString()
+      .replace(/^-/, "")
+      .replace(/^([0-9]+)(e.*)/, "$1.$2")
+      .split(/e|\./);
+    return +pow < 0
+      ? sign +
+          "0." +
+          "0".repeat(Math.max(Math.abs(pow) - 1 || 0, 0)) +
+          lead +
+          decimal
+      : sign +
+          lead +
+          (+pow >= decimal.length
+            ? decimal + "0".repeat(Math.max(+pow - decimal.length || 0, 0))
+            : decimal.slice(0, +pow) + "." + decimal.slice(+pow));
+  };
+  function hex_to_ascii(str1)
+ {
+	var hex  = str1.toString();
+	var str = '';
+	for (var n = 0; n < hex.length; n += 2) {
+		str += String.fromCharCode(parseInt(hex.substr(n, 2), 16));
+	}
+	return str;
+ }
+
+  var setValue;
+  var xyz = 0;
+
+  addOrUpdate = async () => {
+    let nft_id = $("#nft_id").val();
+    let price = $("#price").val();
+    let endDate = $("#end-date").val();
+    let startDate = $("#start-date").val();
+    let setStartTime = Math.floor(new Date(startDate).getTime() / 1000);
+    let setEndTime = Math.floor(new Date(endDate).getTime() / 1000);
+    
+    if (!nft_id) {
+      Swal.fire({
+        icon: "error",
+        title: "NFT Id is Required",
+        showConfirmButton: false,
+        timer: 2000,
+      });
+    } else if (!price) {
+      Swal.fire({
+        icon: "error",
+        title: "Price is Required",
+        showConfirmButton: false,
+        timer: 2000,
+      });
+    } else if (!startDate) {
+      Swal.fire({
+        icon: "error",
+        title: "Start date is Required",
+        showConfirmButton: false,
+        timer: 2000,
+      });
+    } else if (!endDate) {
+      Swal.fire({
+        icon: "error",
+        title: "End Date is Required",
+        showConfirmButton: false,
+        timer: 2000,
+      });
+    }else if(setEndTime < setStartTime){
+      Swal.fire({
+        icon: "error",
+        title: "End Date is Greater then Start time",
+        showConfirmButton: false,
+        timer: 2000,
+      });
+    }else {
+      let tokenId = Number($("#nft_id").val());
+      let tokenPrice = Number($("#price").val()) * 1000000000000000000;
+      let market = await contract.methods.checkMarket(Number(tokenId)).call();
+      console.log(market)
+      if(market == 'Not in market'){
+            await contractNFT.methods
+            .getApproved(Number(tokenId))
+            .call()
+            .then((result) => {
+                if (hex_to_ascii(result) == hex_to_ascii(ContractAddress)) {
+                loaderShow();
+                createApprovedTransction(
+                Number(tokenId),
+                Number(tokenPrice),
+                setStartTime,
+                setEndTime
+                );
+            } else {
+                loaderShow();
+                createAuctionfunction(
+                tokenId,
+                Number(tokenPrice),
+                setStartTime,
+                setEndTime
+                );
+            }
+            })
+            .catch((e) => {
+            Swal.fire({
+                icon: "error",
+                title: "Some thing went wrong please try again.",
+                showConfirmButton: false,
+                timer: 4000,
+            });
+            loaderHide();
+            });
+      }else{
+            Swal.fire({
+            icon: "error",
+            title: "NFT is already in market place",
+            showConfirmButton: false,
+            timer: 2000,
+        });
+        loaderHide();
+      }
+      
+    }
+  };
+
+  createAuctionfunction = async (
+    tokenId,
+    tokenPrice,
+    setStartTime,
+    setEndTime
+  ) => {
+    if (
+      (await web3.eth.net.getNetworkType()) == "private" &&
+      window.ethereum.selectedAddress != null
+    ) {
+        
+      await contractNFT.methods.approve(ContractAddress, tokenId).send(
+        {
+          from: window.ethereum.selectedAddress,
+        },
+        async function (err, nftresult) {
+          if (err) {
+            loaderHide();
+            Swal.fire({
+              icon: "error",
+              title: err.message,
+              showConfirmButton: false,
+              timer: 4000,
+            });
+          }
+          if (nftresult) {
+            loaderShow();
+            setValue = setInterval(function () {
+              checkTransaction(tokenId, tokenPrice, setStartTime, setEndTime);
+            }, 2000);
+          }
+        }
+      );
+    } else {
+      Swal.fire({
+        icon: "warning",
+        text: "Please Connect Wallet",
+      });
+    }
+  };
+
+  checkTransaction = async (tokenId, tokenPrice, setStartTime, setEndTime) => {
+    loaderShow();
+    await contractNFT.methods
+      .getApproved(Number(tokenId))
+      .call()
+      .then(async (result) => {
+        if (hex_to_ascii(result) == hex_to_ascii(ContractAddress)) {
+          if (xyz == 0) {
+            xyz = 1;
+
+            loaderHide();
+            window.clearInterval(setValue);
+            await contract.methods
+              .createAuction(tokenId, tokenPrice.toString(), setStartTime, setEndTime)
+              .send(
+                { from: window.ethereum.selectedAddress },
+                async function (err, result) {
+                  if (err) {
+                    Swal.fire({
+                      icon: "error",
+                      title: err.message,
+                      showConfirmButton: false,
+                      timer: 4000,
+                    });
+                    loaderHide();
+                  }
+                  if (result) {
+                    Swal.fire({
+                      icon: "success",
+                      title:
+                        "Your transaction is sent, Please wait for confirmation.",
+                      showConfirmButton: false,
+                      timer: 4000,
+                    });
+                    loaderHide();
+                    document.getElementById("form").reset();
+                  }
+                }
+              );
+          }
+        }
+      })
+      .catch((e) => {
+        Swal.fire({
+          icon: "error",
+          title: "Some thing Went Wrong Please try again.",
+          showConfirmButton: false,
+          timer: 3000,
+        });
+        loaderHide();
+      });
+  };
+
+  createApprovedTransction = async (
+    tokenId,
+    tokenPrice,
+    setStartTime,
+    setEndTime
+  ) => {
+    if (
+      (await web3.eth.net.getNetworkType()) == "private" &&
+      window.ethereum.selectedAddress != null
+    ) {
+        await contract.methods
+      .createAuction(tokenId, tokenPrice.toString(), setStartTime, setEndTime)
+      .send(
+        { from: window.ethereum.selectedAddress },
+        async function (err, result) {
+          if (err) {
+            Swal.fire({
+              icon: "error",
+              title: err.message,
+              showConfirmButton: false,
+              timer: 4000,
+            });
+            loaderHide();
+          }
+          if (result) {
+            Swal.fire({
+              icon: "success",
+              title: "Your transaction is sent, Please wait for confirmation.",
+              showConfirmButton: false,
+              timer: 4000,
+            });
+            loaderHide();
+            document.getElementById("form").reset();
+          }
+        }
+      );
+    } else {
+      Swal.fire({
+        icon: "warning",
+        text: "Please Connect Wallet",
+      });
+    }
+    
+  };
+</script>
